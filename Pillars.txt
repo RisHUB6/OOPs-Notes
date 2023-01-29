@@ -1,0 +1,139 @@
+package practice;
+
+import java.util.Scanner;
+
+//This is abstract class
+//It is different from every other class simply carry the declaration and rest definition is depending on the child class...
+//every method has to be override same as the given declaration
+abstract class CabService{
+    void getDriverDetails(){}
+    void contactDriver(int x){}
+    void dropLocation(){}
+    void setDriverDetails(String n, String m){}
+}
+
+//This extends is used in the inheritance to create a relation between two class.
+
+//This UBER is another example of the ENCAPSULATION where a class carry all the method in a single place
+//Tightly Encapsulation means when every method is private that means we cannot access that outside of the class.
+
+//Overriding is depending upon the access modifier.
+// CLASS A(Parent)----------------> CLASS B(Child)
+// protected                        protected/public
+// private                          private
+// default                          default/public/protected
+// public                           public
+
+//Overriding is totally depending upon the strictness level there is a strictness level from high to low (top to bottom)
+//private (Strictness level 4)
+//default (Strictness level 3)
+//protected (Strictness level 2)
+//public (Strictness level 1)
+
+class UBER extends CabService{
+    String carName, driverName;
+    private int account;
+    //Below constructor are the example of the constructor overloading
+    UBER(){} // no argument constructor...
+    UBER(String x){ // parameterized constructor...
+        System.out.println("Welcome to Uber");
+    }
+
+    public void setDriverDetails(String cn, String dn){
+        this.carName = cn;
+        this.driverName = dn;
+    }
+
+    //In order to access the final variable we have to make the getter and setter.
+    public void setAccount(int x){
+        this.account = x;
+    }
+
+    public void getAccount(){
+        System.out.println(account);
+    }
+
+    public void getDriverDetails(){
+        System.out.println("Driver name is: " + driverName);
+        System.out.println("Driver car name is " + carName);
+    }
+    //below both code are the example of method overloading...
+    //It can also be known as static polymorphism.
+    public void contactDriver(int x){
+        System.out.println("We are contacting to the driver...");
+    }
+    public void contactDriver(){
+        System.out.println("We are accessing your location and get there soon");
+    }
+    public void dropLocation(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the start point ");
+        String start = sc.nextLine();
+        System.out.println("Enter the destination point ");
+        String end = sc.nextLine();
+
+        System.out.println("We are providing you the driver.");
+        this.getDriverDetails();
+    }
+}
+class Driver extends UBER{
+
+    public void changeName(String name){
+        //Super keyword is use to access the parent class constructor and there method.
+        super.driverName = name;
+    }
+
+    //This is an override method that is present in the parent class.
+    //Also known as dynamic polymorphism.
+    @Override
+    public void setDriverDetails(String cn, String dn) {
+        //Super keyword is used to access the parent class method and constructor.
+        //super(); this will access the parent class constructor.
+        //super.add(3,4); this will access parent class method.
+        super.setDriverDetails(cn,dn);
+        
+        //Fun Fact: you cannot use the super and this keyword in a single block, 
+        //because they both have to be on the top of the block where we are using it.
+    }
+
+    public void sendComplain(String C){
+        System.out.println("Your complain is accepted");
+    }
+}
+public class Pillars {
+    public static void main(String[] args) {
+        //Here are some of the keyword and there meaning
+        //Static: It means that creating method or variable independent of the class, and it will load very beginning of the class of the compilation
+        // Facts about static: 1. You cannot use the static keyword inside the static method
+        //                     2. you cannot put any non-static member inside the static block.
+        //                     3. Static member are equally share to every object that mean changes from one object can be seen form the second object.
+        //                     4. This will execute before the constructor.
+        //Final: It declares the variable constant
+        //      That means declare only one time, and then you cannot change it again
+        //Facts about final: Class with final keyword cannot be inherited
+        //                   method with final keyword cannot be overridden
+
+        UBER driver1 = new UBER("hello"); // This will simply greet from the line 21
+
+        //Here new keyword represent the memory allocation
+        //It provides the memory in the heap area that is why object always occupy the memory not class because of this new keyword.
+
+        //Inheritance carry 4 cases.
+
+        UBER driver2 = new UBER(); // Case 1: Creation of class object with the same reference name of class.
+        Driver driver3 = new Driver(); // Case 2: Same but with child class.
+        UBER driver4 = new Driver(); // Case 3: Creation of child object with reference name of parent class
+//      Driver driver5 = new UBER(); this one simply don't exist
+
+        //CASE 3 is totally responsible for the UPCASTING
+        //UPCASTING: it is the phenomenon of the inheritance where class object can only access the parent class method, it can access only its constructor and override methods
+
+        // driver4.sendComplain("My car is damage"); // This will not work because it can only access the parent class method.
+
+        //In order to avoid this we introduce the DOWNCASTING where we allow the object so that it can also access itself method too.
+        Driver driver4_1 = (Driver)driver4;
+        driver4_1.sendComplain("My car is damage"); // Now this will work completely fine.
+        //In the CASE 3 there is keyword use is Dynamic method dispatch.
+        // Dynamic method dispatch is responsible to help jvm which jvm have to choose the method between child class and parent class that will be executed.
+    }
+}
